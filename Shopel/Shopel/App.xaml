@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application
+    x:Class="Shopel.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Application.Resources>
+        <Style x:Key="BaseStyle" TargetType="Element">
+            <Setter Property="Shell.BackgroundColor" Value="White"/>
+            <Setter Property="Shell.TitleColor" Value="Black"/>
+            <Setter Property="Shell.ForegroundColor" Value="Black"/>
+            <Setter Property="Shell.TabBarBackgroundColor" Value="White"/>
+            <Setter Property="Shell.TabBarForegroundColor" Value="Black"/>
+            <Setter Property="Shell.TabBarUnselectedColor" Value="Gray"/>
+            <Setter Property="Shell.TabBarTitleColor" Value="Black"/>
+        </Style>
+        <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}"/>
+    </Application.Resources>
+</Application>

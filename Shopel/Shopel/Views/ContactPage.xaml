@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Shopel.Views.ContactPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Contact">
+    <StackLayout Margin="20">
+        <Label Text="If you have any questions, You can contact us:"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="By email: "/>
+            <Label
+                Grid.Column="1"
+                Text="samirdahal175@gmail.com"
+                TextColor="Blue"
+                TextDecorations="Underline"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>

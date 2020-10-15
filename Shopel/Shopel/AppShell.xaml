@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell
+    x:Class="Shopel.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Shopel.Views">
+    <TabBar>
+        <Tab Title="Home" Icon="home.png">
+            <ShellContent ContentTemplate="{DataTemplate views:ProductsPage}"/>
+        </Tab>
+        <Tab Title="Categories" Icon="categories.png">
+            <ShellContent ContentTemplate="{DataTemplate views:CategoriesPage}"/>
+        </Tab>
+        <!--<Tab Title="Services" Icon="services.png">
+            <ShellContent ContentTemplate="{DataTemplate views:ServicesPage}"/>
+        </Tab>-->
+        <Tab Title="Contact" Icon="contact.png">
+            <ShellContent ContentTemplate="{DataTemplate views:ContactPage}"/>
+        </Tab>
+    </TabBar>
+</Shell>

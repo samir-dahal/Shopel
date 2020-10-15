@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Shopel.Views.CategoriesPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="this"
+    Title="Categories">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding TotalCartItems}"/>
+        <ToolbarItem IconImageSource="cart.png" Command="{Binding CartPageCommand}"/>
+    </ContentPage.ToolbarItems>
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <StackLayout>
+            <SearchBar
+                Margin="0,0,20,0"
+                SearchCommand="{Binding SearchCategoryCommand}"
+                Text="{Binding SearchTerm}"
+                Placeholder="Search"
+                MaxLength="50"/>
+            <CollectionView
+                Margin="20,0,20,0"
+                SelectionMode="None"
+                ItemsSource="{Binding Categories}"
+                RemainingItemsThreshold="0"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCategoriesCommand}">
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <ActivityIndicator
+                            HeightRequest="60"
+                            WidthRequest="60"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            IsRunning="{Binding IsBusy}"
+                            IsVisible="{Binding IsBusy}"
+                            Color="Blue"/>
+                        <Label
+                            Text="{Binding SearchTerm, StringFormat='No items found with search term {0}'}"
+                            IsVisible="{Binding EndReached}"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout VerticalItemSpacing="30" Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.Footer>
+                    <ActivityIndicator
+                        HeightRequest="30"
+                        WidthRequest="30"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="Blue"/>
+                </CollectionView.Footer>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            BorderColor="LightGray"
+                            HeightRequest="100"
+                            HasShadow="True"
+                            CornerRadius="5">
+                            <Label
+                                Text="{Binding Name}"
+                                FontSize="Medium"
+                                VerticalTextAlignment="Center"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"/>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.ProductsPageCommand, Source={Reference this}}" CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </RefreshView>
+</ContentPage>

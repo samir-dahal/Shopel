@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Shopel.Views.ProductDetailPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:Shopel.Converters"
+    x:Name="this"
+    Title="Details">
+    <ContentPage.Resources>
+        <converters:StringToSubstringConverter x:Key="StringToSubstringConverter"/>
+        <converters:HttpToHttpsConverter x:Key="HttpToHttpsConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding TotalCartItems}"/>
+        <ToolbarItem IconImageSource="cart.png" Command="{Binding CartPageCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label
+                Margin="10,10,0,5"
+                Text="Similar products you may like"
+                IsVisible="{Binding ShowCarousel}"
+                FontSize="Large"/>
+            <CarouselView
+                Grid.Row="1"
+                Margin="0,0,0,0"
+                IsVisible="{Binding ShowCarousel}"
+                ItemsSource="{Binding SimilarProducts}"
+                IndicatorView="indicatorView"
+                HeightRequest="150">
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="20" Orientation="Horizontal"/>
+                </CarouselView.ItemsLayout>
+                <CarouselView.EmptyView>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <ActivityIndicator
+                            HeightRequest="60"
+                            WidthRequest="60"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            IsRunning="True"
+                            IsVisible="True"
+                            Color="Blue"/>
+                    </StackLayout>
+                </CarouselView.EmptyView>
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            HasShadow="True"
+                            BorderColor="#F2EDED"
+                            CornerRadius="10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.ProductDetailCommand, Source={Reference this}}" CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Source="{Binding Image, Converter={StaticResource HttpToHttpsConverter}}"
+                                    HeightRequest="100"
+                                    WidthRequest="100"
+                                    Aspect="AspectFit"/>
+                                <StackLayout
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Spacing="5"
+                                    VerticalOptions="Center">
+                                    <Label Text="{Binding Name, Converter={StaticResource StringToSubstringConverter}}"/>
+                                    <Label Text="{Binding Type, StringFormat='Type: {0}'}"/>
+                                    <Label Text="{Binding Model, StringFormat='Model: {0}'}"/>
+                                    <Label
+                                        Text="{Binding Price, StringFormat='Price: {0:C}'}"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <IndicatorView
+                x:Name="indicatorView"
+                Grid.Row="2"
+                IndicatorColor="LightGray"
+                SelectedIndicatorColor="DarkGray"
+                HorizontalOptions="Center"/>
+            <Frame
+                Grid.Row="3"
+                Margin="10,0,10,10"
+                BorderColor="#F2EDED"
+                BindingContext="{Binding Product}"
+                CornerRadius="5">
+                <StackLayout Spacing="5" VerticalOptions="StartAndExpand">
+                    <Image
+                        Source="{Binding Image, Converter={StaticResource HttpToHttpsConverter}}"
+                        HeightRequest="150"
+                        WidthRequest="150"
+                        HorizontalOptions="Start"
+                        Aspect="AspectFit"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Stepper
+                            x:Name="_stepper"
+                            ValueChanged="_stepper_ValueChanged"
+                            HeightRequest="40"
+                            Minimum="1"/>
+                        <Label
+                            x:Name="quantityLabel"
+                            Grid.Column="1"
+                            Text="{Binding BindingContext.Quantity, Source={Reference this}, StringFormat='Quantity: {0}'}"
+                            VerticalTextAlignment="Center"/>
+                    </Grid>
+                    <Label Text="About this product" FontSize="Large"/>
+                    <Label Text="{Binding Name}"/>
+                    <Label Text="{Binding Model, StringFormat='Model: {0}'}"/>
+                    <Label Text="{Binding Upc, StringFormat='Upc: {0}'}"/>
+                    <Label Text="{Binding Description}"/>
+                    <Label
+                        x:Name="priceLabel"
+                        Text="{Binding BindingContext.ExpandedPrice, Source={Reference this}, StringFormat='Price : {0:C}'}"
+                        FontSize="Medium"
+                        FontAttributes="Bold"/>
+                    <Grid ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Text="Buy now"
+                            BackgroundColor="#03dac6"
+                            CornerRadius="0"/>
+                        <Button
+                            Grid.Column="1"
+                            Text="Add to cart"
+                            Command="{Binding BindingContext.AddToCartCommand, Source={Reference this}}"
+                            CommandParameter="{Binding .}"
+                            BackgroundColor="#6200ee"
+                            TextColor="White"
+                            CornerRadius="0"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+        </Grid>
+    </ScrollView>
+</ContentPage>

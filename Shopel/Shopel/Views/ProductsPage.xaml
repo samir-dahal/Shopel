@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Shopel.Views.ProductsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:converters="clr-namespace:Shopel.Converters"
+    x:Name="this"
+    Title="{Binding Title}">
+    <ContentPage.Resources>
+        <converters:StringToSubstringConverter x:Key="StringToSubstringConverter"/>
+        <converters:HttpToHttpsConverter x:Key="HttpToHttpsConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding TotalCartItems}"/>
+        <ToolbarItem IconImageSource="cart.png" Command="{Binding CartPageCommand}"/>
+    </ContentPage.ToolbarItems>
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <StackLayout>
+            <SearchBar
+                Margin="0,0,20,0"
+                IsVisible="{Binding IsSearchBarVisible}"
+                Placeholder="Search"
+                SearchCommand="{Binding SearchProductCommand}"
+                Text="{Binding SearchTerm}"
+                MaxLength="50"/>
+            <CollectionView
+                Margin="20,0,20,0"
+                ItemsSource="{Binding Products}"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreProductsCommand}"
+                RemainingItemsThreshold="0">
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <ActivityIndicator
+                            HeightRequest="60"
+                            WidthRequest="60"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            IsRunning="{Binding IsBusy}"
+                            IsVisible="{Binding IsBusy}"
+                            Color="Blue"/>
+                        <Label
+                            Text="{Binding SearchTerm, StringFormat='No items found with search term {0}'}"
+                            IsVisible="{Binding EndReached}"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout VerticalItemSpacing="30" Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.Footer>
+                    <ActivityIndicator
+                        HeightRequest="30"
+                        WidthRequest="30"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="Blue"/>
+                </CollectionView.Footer>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            HasShadow="True"
+                            BorderColor="#F2EDED"
+                            CornerRadius="5">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.ProductDetailPageCommand, Source={Reference this}}" CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Source="{Binding Image, Converter={StaticResource HttpToHttpsConverter}}"
+                                    HeightRequest="130"
+                                    WidthRequest="130"
+                                    Aspect="AspectFit"/>
+                                <StackLayout
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Spacing="5"
+                                    VerticalOptions="Center">
+                                    <Label Text="{Binding Name, Converter={StaticResource StringToSubstringConverter}}"/>
+                                    <Label Text="{Binding Type, StringFormat='Type: {0}'}"/>
+                                    <Label Text="{Binding Model, StringFormat='Model: {0}'}"/>
+                                    <Label
+                                        Text="{Binding Price, StringFormat='Price: {0:C}'}"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </RefreshView>
+</ContentPage>
