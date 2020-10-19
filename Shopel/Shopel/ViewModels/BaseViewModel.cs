@@ -251,5 +251,18 @@ namespace Shopel.ViewModels
                 OnPropertyChanged(nameof(ShowCarousel));
             }
         }
+        public void SetProperty<T>(string propName, bool value, T instance, [CallerMemberName] string commandProp = null)
+        {
+            PropertyInfo statusProperty = GetType().GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo commandProperty = instance.GetType().GetProperty(commandProp, BindingFlags.Public | BindingFlags.Instance);
+            if (statusProperty != null && statusProperty.CanWrite)
+            {
+                if(commandProperty != null && commandProperty.CanRead)
+                {
+                    statusProperty.SetValue(this, value);
+                    ((Command)commandProperty.GetValue(instance)).ChangeCanExecute();
+                }
+            }
+        }
     }
 }
