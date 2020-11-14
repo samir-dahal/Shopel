@@ -1,5 +1,5 @@
 # Shopel
-An E-Commerce based android application made with Xamarin.Forms.
+An E-Commerce based application.
 
 # Application dependencies
 - Uses [BestBuy API-Play-Ground](https://github.com/BestBuy/api-playground)
